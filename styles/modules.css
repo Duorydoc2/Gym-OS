@@ -1,0 +1,452 @@
+/* Module Specific Styles for RYDOC GymOS */
+
+/* 1. Onboarding Wizard Overlay */
+.wizard-overlay {
+  position: fixed;
+  inset: 0;
+  background: var(--bg-app);
+  z-index: 1500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  overflow-y: auto;
+}
+.wizard-box {
+  width: 100%;
+  max-width: 680px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-card);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-lg), var(--shadow-glow);
+  padding: 36px;
+  animation: fadeIn 0.3s ease;
+}
+.wizard-header {
+  text-align: center;
+  margin-bottom: 28px;
+}
+.wizard-header .brand-logo {
+  font-size: 2rem;
+  margin-bottom: 8px;
+}
+.wizard-subtitle {
+  color: var(--text-secondary);
+  font-size: 0.92rem;
+}
+
+/* Wizard Steps Indicator */
+.wizard-stepper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 32px;
+  position: relative;
+}
+.wizard-stepper::before {
+  content: '';
+  position: absolute;
+  top: 18px;
+  left: 30px;
+  right: 30px;
+  height: 2px;
+  background: var(--border-card);
+  z-index: 1;
+}
+.wizard-step-node {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+.step-circle {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: var(--bg-card);
+  border: 2px solid var(--border-card);
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 0.9rem;
+  transition: all var(--transition-fast);
+}
+.wizard-step-node.active .step-circle {
+  background: var(--brand-pink-soft);
+  border-color: var(--brand-pink);
+  color: var(--brand-pink);
+  box-shadow: 0 0 14px var(--brand-pink-glow);
+}
+.wizard-step-node.completed .step-circle {
+  background: var(--brand-pink);
+  border-color: var(--brand-pink);
+  color: #ffffff;
+}
+.step-label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+.wizard-step-node.active .step-label {
+  color: var(--text-main);
+}
+
+.wizard-step-pane {
+  display: none;
+}
+.wizard-step-pane.active {
+  display: block;
+}
+.wizard-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 32px;
+  padding-top: 20px;
+  border-top: 1px solid var(--border-subtle);
+}
+
+/* 2. Dashboard Metrics Grid */
+.dashboard-metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  gap: 16px;
+  margin-bottom: 24px;
+}
+.stat-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 18px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  position: relative;
+  overflow: hidden;
+  transition: transform var(--transition-fast), border-color var(--transition-fast);
+}
+.stat-card:hover {
+  transform: translateY(-2px);
+  border-color: var(--border-card);
+}
+.stat-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.stat-label {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.stat-icon {
+  width: 34px;
+  height: 34px;
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+}
+.stat-value {
+  font-size: 1.65rem;
+  font-weight: 800;
+  color: var(--text-main);
+  letter-spacing: -0.5px;
+  line-height: 1.2;
+}
+.stat-subtext {
+  font-size: 0.74rem;
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* Dashboard Charts & Visuals */
+.dashboard-charts-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 20px;
+  margin-bottom: 24px;
+}
+@media (max-width: 1024px) {
+  .dashboard-charts-grid {
+    grid-template-columns: 1fr;
+  }
+}
+.chart-container-box {
+  width: 100%;
+  height: 240px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.chart-canvas {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+/* Quick Action Bar */
+.quick-action-bar {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 24px;
+  overflow-x: auto;
+  padding-bottom: 4px;
+}
+.quick-action-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 18px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  color: var(--text-main);
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all var(--transition-fast);
+}
+.quick-action-btn:hover {
+  background: var(--bg-card-hover);
+  border-color: var(--brand-green);
+  color: var(--brand-green);
+}
+.quick-action-btn .btn-icon {
+  color: var(--brand-green);
+}
+
+/* 3. Member Profile Drawer Details */
+.member-avatar-lg {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: var(--brand-green-soft);
+  border: 2px solid var(--brand-green);
+  color: var(--brand-green);
+  font-size: 1.8rem;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 12px auto;
+}
+.member-detail-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--border-subtle);
+  font-size: 0.86rem;
+}
+.detail-label {
+  color: var(--text-secondary);
+}
+.detail-val {
+  font-weight: 600;
+  color: var(--text-main);
+  text-align: right;
+}
+
+/* 4. Plans Grid */
+.plans-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 20px;
+}
+.plan-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  transition: all var(--transition-fast);
+}
+.plan-card:hover {
+  border-color: var(--brand-green);
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-md);
+}
+.plan-name {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--text-main);
+  margin-bottom: 4px;
+}
+.plan-duration {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  margin-bottom: 16px;
+}
+.plan-price-row {
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+  margin-bottom: 20px;
+}
+.plan-currency {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--brand-green);
+}
+.plan-price-value {
+  font-size: 2rem;
+  font-weight: 900;
+  color: var(--text-main);
+}
+.plan-features-list {
+  list-style: none;
+  margin-bottom: 24px;
+  flex: 1;
+}
+.plan-features-list li {
+  font-size: 0.84rem;
+  color: var(--text-secondary);
+  padding: 6px 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.plan-features-list li svg {
+  color: var(--brand-green);
+  flex-shrink: 0;
+}
+
+/* 5. Trainers Cards */
+.trainers-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 20px;
+}
+.trainer-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  padding: 22px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  position: relative;
+}
+.trainer-avatar {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: var(--bg-sidebar);
+  border: 2px solid var(--border-card);
+  color: var(--brand-green);
+  font-size: 1.5rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 12px;
+}
+.trainer-name {
+  font-size: 1.05rem;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+.trainer-spec {
+  font-size: 0.8rem;
+  color: var(--brand-green);
+  margin-bottom: 12px;
+}
+.trainer-stats-row {
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+  padding: 12px 0;
+  border-top: 1px solid var(--border-subtle);
+  border-bottom: 1px solid var(--border-subtle);
+  margin-bottom: 16px;
+  font-size: 0.78rem;
+}
+
+/* 6. Invoice Print / Receipt Template */
+.invoice-receipt {
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  padding: 28px;
+  max-width: 520px;
+  margin: 0 auto;
+}
+.invoice-receipt-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  border-bottom: 2px dashed var(--border-card);
+  padding-bottom: 18px;
+  margin-bottom: 18px;
+}
+.invoice-title {
+  font-size: 1.3rem;
+  font-weight: 800;
+}
+.invoice-id {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+.invoice-table {
+  width: 100%;
+  margin: 16px 0;
+  border-collapse: collapse;
+}
+.invoice-table th, .invoice-table td {
+  padding: 8px 0;
+  font-size: 0.84rem;
+}
+.invoice-total-row {
+  border-top: 1px solid var(--border-card);
+  font-size: 1.05rem;
+  font-weight: 800;
+}
+
+/* 7. WhatsApp Preview Box */
+.whatsapp-preview-box {
+  background: #0b141a;
+  border: 1px solid #1f2c34;
+  border-radius: var(--radius-md);
+  padding: 16px;
+  margin: 16px 0;
+  position: relative;
+}
+.whatsapp-chat-bubble {
+  background: #005c4b;
+  color: #e9edef;
+  padding: 12px 14px;
+  border-radius: 8px 8px 0 8px;
+  font-size: 0.88rem;
+  line-height: 1.45;
+  white-space: pre-wrap;
+  position: relative;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.4);
+}
+.whatsapp-meta-note {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  margin-top: 8px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* Keyframe animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}

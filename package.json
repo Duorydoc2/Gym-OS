@@ -1,0 +1,12 @@
+{
+  "name": "rydoc-gymos",
+  "version": "1.0.0",
+  "description": "RYDOC GymOS — The Operating System for Modern Gyms & Fitness Centers",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "author": "RYDOC",
+  "license": "MIT"
+}

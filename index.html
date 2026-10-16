@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RYDOC GymOS — The Operating System for Modern Gyms</title>
+  <meta name="description" content="RYDOC GymOS: Premium, local-first gym management platform for member registrations, payments, attendance tracking, and operations.">
+  
+  <!-- Favicon SVG -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%23080a0f'/%3E%3Ctext x='44' y='72' font-family='system-ui, -apple-system, sans-serif' font-weight='900' font-size='60' fill='%23ffffff' text-anchor='middle'%3ER%3C/text%3E%3Crect x='64' y='57' width='16' height='16' rx='4' fill='%23ff3377'/%3E%3C/svg%3E">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="styles/main.css">
+  <link rel="stylesheet" href="styles/components.css">
+  <link rel="stylesheet" href="styles/modules.css">
+</head>
+<body>
+
+  <!-- Floating Demo Sandbox Banner (Strict Isolation - Hidden in Real Mode) -->
+  <div id="sandbox-banner" class="sandbox-banner" style="display: none;">
+    <div class="sandbox-banner-content">
+      <span>⚠️ <strong>DEMO SANDBOX ACTIVE:</strong> You are viewing isolated presentation records. Your real gym data is completely untouched and safe.</span>
+    </div>
+    <button class="sandbox-exit-btn" onclick="window.app.exitDemoSandbox()">
+      Exit Demo Mode
+    </button>
+  </div>
+
+  <div id="app-root">
+
+    <!-- App Sidebar -->
+    <aside class="app-sidebar" id="sidebar">
+      <!-- Sidebar Header & Logo -->
+      <div class="sidebar-header">
+        <a href="#" class="brand-logo" onclick="window.app.navigateTo('dashboard'); return false;">
+          <span class="brand-name">RYDOC</span><span class="brand-dot"></span>
+        </a>
+        <span class="brand-badge">GymOS</span>
+      </div>
+
+      <!-- Active Gym Profile Card with R. Monogram -->
+      <div class="gym-identity-card">
+        <div class="gym-avatar" id="sidebar-gym-avatar"><span>R</span><span class="avatar-dot"></span></div>
+        <div class="gym-details">
+          <div class="gym-name" id="sidebar-gym-name">RYDOC Gym</div>
+          <div class="gym-status-badge">
+            <span class="gym-status-indicator"></span>
+            <span id="sidebar-gym-owner">Local Private DB</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Navigation Links -->
+      <nav class="sidebar-nav">
+        <div class="nav-section-title">Operations</div>
+        
+        <a class="nav-item active" data-route="dashboard" onclick="window.app.navigateTo('dashboard')">
+          <span class="nav-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+          </span>
+          <span>Dashboard</span>
+        </a>
+
+        <a class="nav-item" data-route="members" onclick="window.app.navigateTo('members')">
+          <span class="nav-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+          </span>
+          <span>Members</span>
+          <span class="nav-badge" id="badge-members-count">0</span>
+        </a>
+
+        <a class="nav-item" data-route="attendance" onclick="window.app.navigateTo('attendance')">
+          <span class="nav-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+          </span>
+          <span>Attendance</span>
+          <span class="nav-badge" id="badge-attendance-count">0</span>
+        </a>
+
+        <a class="nav-item" data-route="payments" onclick="window.app.navigateTo('payments')">
+          <span class="nav-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect><line x1="1" y1="10" x2="23" y2="10"></line></svg>
+          </span>
+          <span>Payments</span>
+          <span class="nav-badge" id="badge-payments-count">0</span>
+        </a>
+
+        <div class="nav-section-title">Management</div>
+
+        <a class="nav-item" data-route="plans" onclick="window.app.navigateTo('plans')">
+          <span class="nav-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
+          </span>
+          <span>Membership Plans</span>
+        </a>
+
+        <a class="nav-item" data-route="trainers" onclick="window.app.navigateTo('trainers')">
+          <span class="nav-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 18h12"></path><path d="M6 6h12"></path><rect x="2" y="10" width="20" height="4" rx="1"></rect></svg>
+          </span>
+          <span>Trainers</span>
+        </a>
+
+        <a class="nav-item" data-route="leads" onclick="window.app.navigateTo('leads')">
+          <span class="nav-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="6"></circle><circle cx="12" cy="12" r="2"></circle></svg>
+          </span>
+          <span>Leads & Enquiries</span>
+          <span class="nav-badge" id="badge-leads-count">0</span>
+        </a>
+
+        <a class="nav-item" data-route="inventory" onclick="window.app.navigateTo('inventory')">
+          <span class="nav-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>
+          </span>
+          <span>Inventory</span>
+          <span class="nav-badge" id="badge-inventory-count">0</span>
+        </a>
+
+        <a class="nav-item" data-route="communications" onclick="window.app.navigateTo('communications')">
+          <span class="nav-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg>
+          </span>
+          <span>Communications</span>
+        </a>
+
+        <div class="nav-section-title">System</div>
+
+        <a class="nav-item" data-route="settings" onclick="window.app.navigateTo('settings')">
+          <span class="nav-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+          </span>
+          <span>Settings & Backups</span>
+        </a>
+      </nav>
+
+      <!-- Sidebar Footer -->
+      <div class="sidebar-footer">
+        <div style="font-size:0.7rem; color:var(--text-muted); display:flex; justify-content:space-between; align-items:center;">
+          <span>Strict Local DB</span>
+          <span style="color:var(--brand-green); font-weight:700;">Offline Mode</span>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Content Shell -->
+    <main class="app-main">
+      <!-- App Header -->
+      <header class="app-header">
+        <div class="header-left">
+          <button class="mobile-sidebar-toggle" onclick="window.app.toggleSidebar()" title="Toggle Menu">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+          </button>
+          <div class="header-page-title" id="page-title-text">Dashboard Overview</div>
+        </div>
+
+        <div class="header-right">
+          <!-- Demo Sandbox Trigger -->
+          <button class="btn btn-outline btn-sm" onclick="window.app.enterDemoSandbox()" title="Launch isolated sample data presentation without touching real records">
+            ⚡ Demo Sandbox
+          </button>
+
+          <!-- Theme Mode Switcher -->
+          <button class="btn-icon" id="theme-toggle-btn" onclick="window.app.toggleTheme()" title="Switch Light/Dark Mode">
+            ☀️
+          </button>
+
+          <!-- Quick Setup Re-open -->
+          <button class="btn btn-secondary btn-sm" onclick="window.wizard.show()" title="Configure Gym Details">
+            ⚙️ Setup
+          </button>
+        </div>
+      </header>
+
+      <!-- Dynamic Route Viewport -->
+      <div class="content-area" id="module-container">
+        <!-- Rendered dynamically by active module -->
+      </div>
+    </main>
+
+  </div>
+
+  <!-- First-time Setup Wizard Modal (Requirement 3) -->
+  <div class="wizard-overlay" id="wizard-modal" style="display: none;">
+    <div class="wizard-box">
+      <div class="wizard-header">
+        <div class="brand-logo">
+          <span class="brand-name">RYDOC</span><span class="brand-dot"></span>
+        </div>
+        <p class="wizard-subtitle">Set up your gym workspace in 4 easy steps</p>
+      </div>
+
+      <!-- Stepper -->
+      <div class="wizard-stepper">
+        <div class="wizard-step-node active" id="step-node-1">
+          <div class="step-circle">1</div>
+          <span class="step-label">Gym Info</span>
+        </div>
+        <div class="wizard-step-node" id="step-node-2">
+          <div class="step-circle">2</div>
+          <span class="step-label">Operations</span>
+        </div>
+        <div class="wizard-step-node" id="step-node-3">
+          <div class="step-circle">3</div>
+          <span class="step-label">Pricing Plans</span>
+        </div>
+        <div class="wizard-step-node" id="step-node-4">
+          <div class="step-circle">4</div>
+          <span class="step-label">Finish</span>
+        </div>
+      </div>
+
+      <!-- Step 1: Gym Information -->
+      <div class="wizard-step-pane active" id="step-pane-1">
+        <h3 style="font-size:1.1rem; font-weight:700; margin-bottom:16px;">Step 1: Gym Information</h3>
+        <div class="form-grid-2">
+          <div class="form-group">
+            <label class="form-label">Gym / Fitness Center Name <span class="required">*</span></label>
+            <input type="text" class="form-control" id="wiz-gym-name" placeholder="e.g. Iron Forge Fitness" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Owner / Manager Name <span class="required">*</span></label>
+            <input type="text" class="form-control" id="wiz-owner-name" placeholder="e.g. Vikram Malhotra" required>
+          </div>
+        </div>
+
+        <div class="form-grid-2">
+          <div class="form-group">
+            <label class="form-label">Business Phone Number <span class="required">*</span></label>
+            <input type="tel" class="form-control" id="wiz-phone" placeholder="e.g. 9876543210" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Business Email Address <span class="optional">(optional)</span></label>
+            <input type="email" class="form-control" id="wiz-email" placeholder="contact@ironforge.com">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Gym Physical Address <span class="optional">(optional)</span></label>
+          <input type="text" class="form-control" id="wiz-address" placeholder="e.g. #14, 2nd Floor, Park Avenue">
+        </div>
+      </div>
+
+      <!-- Step 2: Business Configuration -->
+      <div class="wizard-step-pane" id="step-pane-2">
+        <h3 style="font-size:1.1rem; font-weight:700; margin-bottom:16px;">Step 2: Business & Billing Preferences</h3>
+        <div class="form-grid-2">
+          <div class="form-group">
+            <label class="form-label">Operating Currency</label>
+            <select class="form-control" id="wiz-currency">
+              <option value="INR" selected>Indian Rupee (₹ INR)</option>
+              <option value="USD">US Dollar ($ USD)</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Invoice / Member ID Prefix</label>
+            <input type="text" class="form-control" id="wiz-invoice-prefix" value="RYD-">
+          </div>
+        </div>
+
+        <div class="form-grid-3">
+          <div class="form-group">
+            <label class="form-label">Opening Time</label>
+            <input type="time" class="form-control" id="wiz-opening-time" value="06:00">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Closing Time</label>
+            <input type="time" class="form-control" id="wiz-closing-time" value="22:00">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Tax / GST Rate (%)</label>
+            <input type="number" class="form-control" id="wiz-tax-rate" value="0">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Working Days</label>
+          <input type="text" class="form-control" id="wiz-working-days" value="Monday - Saturday">
+        </div>
+
+        <div style="display:flex; align-items:center; gap:10px; margin-top:10px;">
+          <input type="checkbox" id="wiz-multicheckin" checked style="width:16px; height:16px;">
+          <label for="wiz-multicheckin" style="font-size:0.84rem; color:var(--text-main);">Allow multiple check-ins per day for registered members</label>
+        </div>
+      </div>
+
+      <!-- Step 3: Membership Plans -->
+      <div class="wizard-step-pane" id="step-pane-3">
+        <h3 style="font-size:1.1rem; font-weight:700; margin-bottom:8px;">Step 3: Define Your Membership Plans</h3>
+        <p style="font-size:0.82rem; color:var(--text-secondary); margin-bottom:16px;">
+          Create your actual pricing tiers now, or click Next to configure them later in Membership Plans.
+        </p>
+
+        <div style="background:var(--bg-app); border:1px solid var(--border-card); border-radius:var(--radius-md); padding:16px; margin-bottom:16px;">
+          <div class="form-grid-2">
+            <div class="form-group">
+              <label class="form-label">Plan Name</label>
+              <input type="text" class="form-control" id="wiz-plan-name" placeholder="e.g. Monthly Standard">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Price (₹)</label>
+              <input type="number" class="form-control" id="wiz-plan-price" placeholder="e.g. 2000">
+            </div>
+          </div>
+          <div class="form-grid-2">
+            <div class="form-group">
+              <label class="form-label">Duration</label>
+              <input type="number" class="form-control" id="wiz-plan-duration" value="1" min="1">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Duration Unit</label>
+              <select class="form-control" id="wiz-plan-unit">
+                <option value="months">Month(s)</option>
+                <option value="days">Day(s)</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Description <span class="optional">(optional)</span></label>
+            <input type="text" class="form-control" id="wiz-plan-desc" placeholder="Cardio and weights floor access">
+          </div>
+          <button type="button" class="btn btn-secondary btn-sm" onclick="window.wizard.addPlanToWizard()">
+            + Add This Plan
+          </button>
+        </div>
+
+        <div style="font-size:0.8rem; font-weight:700; color:var(--text-secondary); margin-bottom:8px;">Staged Plans:</div>
+        <div id="wiz-plans-list">
+          <div style="text-align:center; padding:16px; color:var(--text-muted); font-size:0.82rem; border:1px dashed var(--border-card); border-radius:var(--radius-sm);">
+            No plans added yet. You can add your actual plans above or click Next to skip.
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 4: Finish Setup -->
+      <div class="wizard-step-pane" id="step-pane-4">
+        <h3 style="font-size:1.1rem; font-weight:700; margin-bottom:8px;">Step 4: Ready to Launch</h3>
+        <p style="font-size:0.84rem; color:var(--text-secondary); margin-bottom:20px;">
+          Review your gym profile details before opening your clean, empty dashboard.
+        </p>
+
+        <div class="card" style="padding:16px; margin-bottom:20px;">
+          <div class="member-detail-item">
+            <span class="detail-label">Gym Name</span>
+            <span class="detail-val" id="wiz-sum-gym" style="color:var(--brand-green); font-size:1rem;">—</span>
+          </div>
+          <div class="member-detail-item">
+            <span class="detail-label">Owner Contact</span>
+            <span class="detail-val" id="wiz-sum-owner">—</span>
+          </div>
+          <div class="member-detail-item">
+            <span class="detail-label">Configuration</span>
+            <span class="detail-val" id="wiz-sum-config">—</span>
+          </div>
+          <div class="member-detail-item" style="border-bottom:none;">
+            <span class="detail-label">Initial Plans</span>
+            <span class="detail-val" id="wiz-sum-plans">—</span>
+          </div>
+        </div>
+
+        <div style="background:var(--brand-green-soft); border:1px solid rgba(34,197,94,0.3); border-radius:var(--radius-md); padding:14px; font-size:0.82rem; color:var(--text-main); display:flex; align-items:center; gap:10px;">
+          <span style="font-size:1.3rem;">🛡️</span>
+          <div>
+            <strong>Strict Local Storage Active:</strong> Your workspace starts 100% clean with 0 business records. All data entered by you is saved privately in this browser.
+          </div>
+        </div>
+      </div>
+
+      <!-- Wizard Navigation Buttons -->
+      <div class="wizard-actions">
+        <button type="button" class="btn btn-outline" id="wiz-prev-btn" onclick="window.wizard.prevStep()">
+          ← Back
+        </button>
+        <button type="button" class="btn btn-primary" id="wiz-next-btn" onclick="window.wizard.nextStep()">
+          Next Step →
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Reusable Modal Backdrop -->
+  <div class="modal-backdrop" id="app-modal-backdrop" onclick="window.app.closeModal()">
+    <div class="modal-dialog" id="app-modal-dialog" onclick="event.stopPropagation()">
+      <div class="modal-header">
+        <div class="modal-title" id="app-modal-title">Modal Title</div>
+        <button class="modal-close-btn" onclick="window.app.closeModal()">✕</button>
+      </div>
+      <div class="modal-body" id="app-modal-body">
+        <!-- Dynamic Modal Body Content -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Global Toast Notifications Container -->
+  <div class="toast-container" id="toast-container"></div>
+
+  <!-- JavaScript Modules in Dependency Order -->
+  <script src="js/storage.js"></script>
+  <script src="js/store.js"></script>
+  <script src="js/wizard.js"></script>
+  <script src="js/modules/dashboard.js"></script>
+  <script src="js/modules/members.js"></script>
+  <script src="js/modules/payments.js"></script>
+  <script src="js/modules/attendance.js"></script>
+  <script src="js/modules/trainers.js"></script>
+  <script src="js/modules/plans.js"></script>
+  <script src="js/modules/leads.js"></script>
+  <script src="js/modules/inventory.js"></script>
+  <script src="js/modules/communications.js"></script>
+  <script src="js/modules/settings.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
